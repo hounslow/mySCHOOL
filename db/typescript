@@ -1,74 +1,0 @@
-Script started on Tue 18 Oct 2016 10:42:02 PM PDT
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004h[?2004l
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004hlls[?2004l
-migrate    seeds.rb   seeds.txt   typescript.txt
-schema.rb  seeds.rb~  typescript
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004hcclear[?2004l
-[H[J[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004hlls[?2004l
-migrate    seeds.rb   seeds.txt   typescript.txt
-schema.rb  seeds.rb~  typescript
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004hls  ls  rrake db:seed[1m [m[m d
-Completing rake target
-[0mdb:create              -- creates the databas
-db:drop                -- drops the database 
-db:environment:set     -- set the environment
-db:fixtures:load       -- loads fixtures into
-db:migrate             -- migrate the databas
-db:migrate:status      -- display status of m
-db:rollback            -- rolls the schema ba
-db:schema:cache:clear  -- clears a db/schema_
-db:schema:cache:dump   -- creates a db/schema
-db:schema:dump         -- creates a db/schema
-db:schema:load         -- loads a schema.rb f
-db:seed                -- loads the seed data
-db:setup               -- creates the databas
-db:structure:dump      -- dumps the database 
-db:structure:load      -- recreates the datab
-db:version             -- retrieves the curre
-[Jdev:cache              -- toggle development [J[18A[m[23m[24m[7Crake db:seed d[K > log.txt[?2004l
-[J(in /home/dylan/UBC/304/project)
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004h[m[23m[24m[Jdylan% [m[23m[24m[Jdylan% ggit init[?2004l
-Initialized empty Git repository in /home/dylan/UBC/304/project/db/.git/
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004hrrm -rf .git[1m/[m[m [?2004l
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004hccd ..[?2004l
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004hlls[?2004l
-Gemfile       Rakefile	config.ru  public
-Gemfile.lock  app	db	   test
-Gemfile~      bin	lib	   tmp
-README.md     config	log	   vendor
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004hppwd[?2004l
-/home/dylan/UBC/304/project
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004hggit init[?2004l
-Initialized empty Git repository in /home/dylan/UBC/304/project/.git/
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004hggit remote add origin git@github.com:Danyl [KNNysom/mySCHOOL.git[?2004l
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004hggit push -u origin master[?2004l
-error: src refspec master does not match any.
-error: failed to push some refs to 'git@github.com:DanylNysom/mySCHOOL.git'
-[1m[3m%[23m[1m[m                                                 [m[23m[24m[Jdylan% [K[?2004hggits  tsat    status[?2004l
-On branch master
-
-Initial commit
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-
-	[31m.gitignore[m
-	[31mGemfile[m
-	[31mGemfile.lock[m
-	[31mGemfile~[m
-	[31mREADME.md[m
-	[31mRakefile[m
-	[31mapp/[m
-	[31mbin/[m
-	[31mconfig.ru[m
-	[31mconfig/[m
-	[31mdb/[m
-	[31mlib/[m
-	[31mlog/[m
-	[31mpublic/[m
-	[31mtest/[m
-	[31mtmp/[m
-	[31mvendor/[m
-
-nothing added to commit but untracked files present (use "git add" to track)
-[1m[3m%[23m[1m[m                                    

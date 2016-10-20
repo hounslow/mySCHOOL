@@ -1,3 +1,0 @@
-{"instructor_name"=>"Paula Marx", "instructor_email"=>"paula_marx@gmail.com"}
-{"instructor_name"=>"Darrell Williams", "instructor_email"=>"dwills@aol.com"}
-{"instructor_name"=>"Yu Li", "instructor_email"=>"yu@yu.com"}

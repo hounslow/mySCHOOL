@@ -25,8 +25,8 @@ ActiveRecord::Schema.define(version: 6) do
   end
 
   create_table "office_hours", primary_key: ["start", "end", "day", "instructor_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.date    "start",                   null: false
-    t.date    "end",                     null: false
+    t.time    "start",                   null: false
+    t.time    "end",                     null: false
     t.integer "day",           limit: 1, null: false
     t.integer "instructor_id",           null: false
     t.index ["instructor_id"], name: "instructor_id", using: :btree
