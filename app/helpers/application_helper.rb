@@ -18,7 +18,12 @@ module ApplicationHelper
                    {"student_id" => student_id})
   end
 
-  def registered_in?(student_id, section_id)
+  def section_exists?(section_id)
+    return exists?("section_teaches",
+                   {"section_id" => section_id})
+  end
+
+  def enrolled_in?(student_id, section_id)
     return exists?("enrollments",
                    {"student_id" => student_id,
                     "section_id" => section_id})
@@ -36,9 +41,9 @@ module ApplicationHelper
     if !student_exists?(student_id)
       flash[:error] = no_student_error(student_id)
       return false
-    # Make sure student is registered in the course
-    elsif !registered_in?(student_id, section_id)
-      flash[:error] = not_registered_error(section_id)
+    # Make sure student is enrolled in the course
+    elsif !enrolled_in?(student_id, section_id)
+      flash[:error] = not_enrolled_error(section_id)
       return false
     # Make sure project doesn't exist
     elsif project_exists?(student_id, project_name, section_id )
@@ -57,7 +62,27 @@ module ApplicationHelper
       flash[:error] = no_student_error(student_id)
       return false
     else
-      select_grades(student_id, section_id)
+      grades = select_grades(student_id, section_id)
+      if grades.empty?
+        flash[:notice] = no_grades_notice(section_id)
+      end
+      grades
+    end
+  end
+
+  def enroll(student_id, section_id)
+    if !student_exists?(student_id)
+      flash[:error] = no_student_error(student_id)
+      return false
+    elsif !section_exists?(section_id)
+      flash[:error] = no_section_error(section_id)
+      return false
+    elsif enrolled_in?(student_id, section_id)
+      flash[:error] = already_enrolled_error(section_id)
+      return false
+    else
+      insert_enrollment(student_id, section_id)
+      flash[:notice] = successful_enrollment_notice(section_id)
     end
   end
 
@@ -66,14 +91,34 @@ module ApplicationHelper
     "No student with ID #{student_id} exists"
   end
 
-  def not_registered_error(section_id)
-    "You are not registered in course #{section_id}"
+  def no_section_error(section_id)
+    "No section with ID #{section_id} exists"
+  end
+
+  def already_enrolled_error(section_id)
+    "You are already enrolled in course #{section_id}"
+  end
+
+  def not_enrolled_error(section_id)
+    "You are not enrolled in course #{section_id}"
   end
 
   def project_exists_error
     "You already have a project with that name"
   end
 
+  def successful_enrollment_notice(section_id)
+    "Successfully enrolled in #{section_id}"
+  end
+
+  def no_grades_notice(section_id = nil)
+    if section_id
+      "No grades for section #{section_id}"
+    else
+      "No grades"
+    end
+  end
+      
   # Does no error checking; use create_project
   def insert_project(student_id, project_name, section_id)
     ActiveRecord::Base.connection.execute("
@@ -81,6 +126,15 @@ module ApplicationHelper
     (project_name, student_id, section_id)
     VALUES
     ('#{project_name}', #{student_id}, #{section_id});")
+  end
+
+  # Does no error checking; use enroll
+  def insert_enrollment(student_id, section_id)
+    ActiveRecord::Base.connection.execute("
+    INSERT INTO enrollments
+    (student_id, section_id)
+    VALUES
+    (#{student_id}, #{section_id});")
   end
 
   # Does no error checking; use retrieve_grades

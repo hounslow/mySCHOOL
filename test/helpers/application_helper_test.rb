@@ -17,12 +17,12 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_not student_exists?(8)
   end
 
-  test "registered_in? true" do
-    assert registered_in?(1,80)
+  test "enrolled_in? true" do
+    assert enrolled_in?(1,80)
   end
 
-  test "registered_in? false" do
-    assert_not registered_in?(1,78)
+  test "enrolled_in? false" do
+    assert_not enrolled_in?(1,78)
   end
 
   test "project_exists? true" do
@@ -45,9 +45,9 @@ class ApplicationHelperTest < ActionView::TestCase
     # No such student
     assert_not create_project(8, 'Assignment 1', 80)
     assert_equal no_student_error(8), flash[:error]
-    # Student not registered in course
+    # Student not enrolled in course
     assert_not create_project(1, 'Assignment 1', 78)
-    assert_equal not_registered_error(78), flash[:error]
+    assert_equal not_enrolled_error(78), flash[:error]
     # Project exists
     assert_not create_project(1, 'Assignment 1', 80)
     assert_equal project_exists_error, flash[:error]
@@ -60,13 +60,30 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_not retrieve_grades(3, 78).empty?
     # Student has no grades at all
     assert retrieve_grades(2).empty?
+    assert_equal no_grades_notice, flash[:notice]
     # Student has no grades in specified course
     assert retrieve_grades(3,80).empty?
+    assert_equal no_grades_notice(80), flash[:notice]
   end
 
   test "retrieve_grades false" do
     # No such student
     assert_not retrieve_grades(8)
     assert_equal no_student_error(8), flash[:error]
+  end
+
+  test "enroll true" do
+    assert enroll(4,80)
+    assert_equal successful_enrollment_notice(80), flash[:notice]
+    assert enrolled_in?(4,80)
+  end
+
+  test "enroll false" do
+    # No such student
+    assert_not enroll(8,80)
+    # No such section
+    assert_not enroll(1,1000)
+    # Student already enrolled
+    assert_not enroll(1,80)
   end
 end
