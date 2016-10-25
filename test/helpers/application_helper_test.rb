@@ -44,12 +44,29 @@ class ApplicationHelperTest < ActionView::TestCase
   test "create_project false" do
     # No such student
     assert_not create_project(8, 'Assignment 1', 80)
-    assert_equal "No student with ID 8 exists", flash[:error]
+    assert_equal no_student_error(8), flash[:error]
     # Student not registered in course
     assert_not create_project(1, 'Assignment 1', 78)
-    assert_equal "You are not registered in course 78", flash[:error]
+    assert_equal not_registered_error(78), flash[:error]
     # Project exists
     assert_not create_project(1, 'Assignment 1', 80)
-    assert_equal "You already have a project with that name", flash[:error]
+    assert_equal project_exists_error, flash[:error]
+  end
+
+  test "retrieve_grades true" do
+    # Student has grades in at least one course
+    assert_not retrieve_grades(3).empty?
+    # Student has grades in specified course
+    assert_not retrieve_grades(3, 78).empty?
+    # Student has no grades at all
+    assert retrieve_grades(2).empty?
+    # Student has no grades in specified course
+    assert retrieve_grades(3,80).empty?
+  end
+
+  test "retrieve_grades false" do
+    # No such student
+    assert_not retrieve_grades(8)
+    assert_equal no_student_error(8), flash[:error]
   end
 end

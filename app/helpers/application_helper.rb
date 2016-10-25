@@ -34,15 +34,15 @@ module ApplicationHelper
   def create_project(student_id, project_name, section_id)
     # Make sure student exists
     if !student_exists?(student_id)
-      flash[:error] = "No student with ID #{student_id} exists"
+      flash[:error] = no_student_error(student_id)
       return false
     # Make sure student is registered in the course
     elsif !registered_in?(student_id, section_id)
-      flash[:error] = "You are not registered in course #{section_id}"
+      flash[:error] = not_registered_error(section_id)
       return false
     # Make sure project doesn't exist
     elsif project_exists?(student_id, project_name, section_id )
-      flash[:error] = "You already have a project with that name"
+      flash[:error] = project_exists_error
       return false
     # Everything looks good
     else
@@ -51,7 +51,29 @@ module ApplicationHelper
     end
   end
 
+  def retrieve_grades(student_id, section_id = nil)
+    # Make sure student exists
+    if !student_exists?(student_id)
+      flash[:error] = no_student_error(student_id)
+      return false
+    else
+      select_grades(student_id, section_id)
+    end
+  end
+
   private
+  def no_student_error(student_id)
+    "No student with ID #{student_id} exists"
+  end
+
+  def not_registered_error(section_id)
+    "You are not registered in course #{section_id}"
+  end
+
+  def project_exists_error
+    "You already have a project with that name"
+  end
+
   # Does no error checking; use create_project
   def insert_project(student_id, project_name, section_id)
     ActiveRecord::Base.connection.execute("
@@ -59,5 +81,17 @@ module ApplicationHelper
     (project_name, student_id, section_id)
     VALUES
     ('#{project_name}', #{student_id}, #{section_id});")
+  end
+
+  # Does no error checking; use retrieve_grades
+  def select_grades(student_id, section_id)
+    query = "SELECT project_name, section_id, grade, instructor_id
+      FROM project_grades WHERE student_id = #{student_id} AND
+      grade IS NOT NULL"
+    if section_id
+      query << " AND section_id = #{section_id}"
+    end
+    query << ";"
+    ActiveRecord::Base.connection.exec_query(query)
   end
 end
