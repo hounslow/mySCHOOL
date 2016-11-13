@@ -54,11 +54,11 @@ ActiveRecord::Schema.define(version: 6) do
     t.string "student_email", limit: 30
   end
 
-  add_foreign_key "enrollments", "section_teaches", column: "section_id", primary_key: "section_id", name: "enrollments_ibfk_1"
-  add_foreign_key "enrollments", "students", primary_key: "student_id", name: "enrollments_ibfk_2"
-  add_foreign_key "office_hours", "instructors", primary_key: "instructor_id", name: "office_hours_ibfk_1"
+  add_foreign_key "enrollments", "section_teaches", column: "section_id", primary_key: "section_id", name: "enrollments_ibfk_1", on_delete: :cascade
+  add_foreign_key "enrollments", "students", primary_key: "student_id", name: "enrollments_ibfk_2", on_delete: :cascade
+  add_foreign_key "office_hours", "instructors", primary_key: "instructor_id", name: "office_hours_ibfk_1", on_delete: :cascade
   add_foreign_key "project_grades", "instructors", primary_key: "instructor_id", name: "project_grades_ibfk_3"
-  add_foreign_key "project_grades", "section_teaches", column: "section_id", primary_key: "section_id", name: "project_grades_ibfk_2"
-  add_foreign_key "project_grades", "students", primary_key: "student_id", name: "project_grades_ibfk_1"
-  add_foreign_key "section_teaches", "instructors", primary_key: "instructor_id", name: "section_teaches_ibfk_1"
+  add_foreign_key "project_grades", "section_teaches", column: "section_id", primary_key: "section_id", name: "project_grades_ibfk_2", on_delete: :cascade
+  add_foreign_key "project_grades", "students", primary_key: "student_id", name: "project_grades_ibfk_1", on_delete: :cascade
+  add_foreign_key "section_teaches", "instructors", primary_key: "instructor_id", name: "section_teaches_ibfk_1", on_delete: :cascade
 end
