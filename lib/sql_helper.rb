@@ -22,6 +22,13 @@ module SqlHelper
     ('#{project_name}', #{student_id}, #{section_id});")
   end
 
+  def SqlHelper.retrieve_students_from_project(specifiers)
+    ActiveRecord::Base.connection.exec_query("
+      SELECT students.* from students, project_grades
+      #{parse_specifiers(specifiers)}
+      AND students.student_id = project_grades.student_id;")
+  end
+
   private
   # Parses a set of specifiers {"student_id" => 1, ...} into a WHERE
   # clause "WHERE student_id = 1 AND ..."

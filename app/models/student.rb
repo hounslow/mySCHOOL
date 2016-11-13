@@ -24,7 +24,6 @@ class Student < ActiveRecord::Base
     # Make sure project doesn't exist
     elsif ProjectGrades.exists?(student_id, project_name, section_id)
       raise ProjectGrades.project_exists_error
-#      return false
     # Everything looks good
     else
       SqlHelper.insert_project(student_id, project_name, section_id)
