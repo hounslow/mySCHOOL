@@ -32,9 +32,13 @@ class Student < ActiveRecord::Base
   end
 
   def grades(section_id = nil)
-    select_grades(student_id, section_id)
+    Student.select_grades(student_id, section_id)
   end
 
+  def projects
+    results = Student.select_projects(student_id)
+    results.map {|res| ProjectGrades.new(res)}
+  end
 
   private
   def Student.no_student_error(student_id)
@@ -54,7 +58,7 @@ class Student < ActiveRecord::Base
   end
 
    # Does no error checking; use retrieve_grades
-  def select_grades(student_id, section_id)
+  def Student.select_grades(student_id, section_id)
     query = "SELECT project_name, section_id, grade, instructor_id
       FROM project_grades WHERE student_id = #{student_id} AND
       grade IS NOT NULL"
@@ -63,5 +67,10 @@ class Student < ActiveRecord::Base
     end
     query << ";"
     ActiveRecord::Base.connection.exec_query(query)
+  end
+
+  def Student.select_projects(student_id)
+    SqlHelper.retrieve("project_grades",{
+      "student_id" => student_id})
   end
 end

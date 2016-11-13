@@ -54,4 +54,17 @@ class StudentTest < ActionView::TestCase
       Student.retrieve(3).grades(3,80).empty?
     }
   end
+
+  test "retrieve_projects" do
+    # Student has projects
+    projects = Student.retrieve(1).projects
+    projects.map!{|a| {"name" => a.project_name, "section" => a.section_id}}
+    assert_includes projects, {"name" => "Assignment 1", "section" => 80}
+    assert_includes projects, {"name" => "Assignment 2", "section" => 80}
+    assert_equal projects.size, 2
+    # Student has no projects
+    projects2 = Student.retrieve(2).projects
+    assert_empty projects2
+  end
+
 end
