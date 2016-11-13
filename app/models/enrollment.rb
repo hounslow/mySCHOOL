@@ -31,4 +31,8 @@ class Enrollment < ActiveRecord::Base
   def Enrollment.already_enrolled_error(section_id)
     "You are already enrolled in course #{section_id}"
   end
+
+# no students enrolled
+  def Enrollment.no_student_error{section_id}
+    "No students enrolled in course #{section_id}"
 end
