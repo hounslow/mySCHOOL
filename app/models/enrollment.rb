@@ -33,6 +33,7 @@ class Enrollment < ActiveRecord::Base
   end
 
 # no students enrolled
-  def Enrollment.no_student_error{section_id}
+  def Enrollment.no_student_error(section_id)
     "No students enrolled in course #{section_id}"
+  end
 end

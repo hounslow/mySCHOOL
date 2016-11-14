@@ -60,15 +60,17 @@ class Instructor < ActiveRecord::Base
 # if the project actually exists to begin with
 # case 1: it doesn't so we return an error
 # case 2: we insert into project_grades the grade
-  def grade(instructor_id, student_id, project_name, grade)
-    if !ProjectGrades.exists?(student_id, project_name, section_id)
+  def grade(student_id, project_name, section_id, grade)
+    project = ProjectGrades.retrieve(student_id, project_name, section_id)
+    if project == nil
       raise ProjectGrades.no_project_error
-    elseif ProjectGrades.exists?(student_id, project_name, section_id)
+    else
       ActiveRecord::Base.connection.execute("
       INSERT INTO project_grades
-      (student_id, project_name, section_id, grade)
+      (student_id, project_name, section_id, grade, instructor_id)
       VALUES
-      {#{student_id}, #{project_name}, #{section_id}, #{grade});")
+      (#{student_id}, '#{project_name}', #{section_id}, #{grade}, #{instructor_id})
+      ON DUPLICATE KEY UPDATE grade=#{grade}, instructor_id=#{instructor_id};")
       return true
     end
   end
