@@ -1,7 +1,7 @@
 require 'sql_helper'
 
-class Instructor <ActiveRecord::Base
-# simply existence check
+class Instructor < ActiveRecord::Base
+# simple existence check
   def Instructor.exists?(instructor_id)
     return SqlHelper.exists?("instructors",
     {"instructor_id" => instructor_id})
@@ -18,28 +18,49 @@ class Instructor <ActiveRecord::Base
     else
       Instructor.new(results.first)
     end
+  end
 
 # want to view enrollment for section with section_id
 # first check is for existence, if no then return error
 # if exists then call SqlHelper to retrieve the students that
 #  correlate to specified section_id
-TODO:
-  def Instructor.view_enrollment(section_id)
-    if !Section.exists?(section_id)
-      raise Section.no_section_error(section_id)
-    elseif Section.exists?(section_id)
-    results = SqlHelper.retrieve("students",
-        {"student_id" => student_id,
-          "")
-          return results
-        end
+  def view_enrollment(section_id)
+    query = "SELECT student_id, project_name
+    FROM enrollments WHERE section_id = #{section_id}"
+    if section_id
+      query << " AND section_id = #{section_id}"
+    end
+    query << ";"
+    ActiveRecord::Base.connect.exec_query(query)
+  end
+
+  def project_query(project_name)
+    query = "SELECT * FROM project_grades
+    WHERE project_name = #{project_name}"
+    if project_name
+      query << " AND project_name = #{project_name}"
+    end
+    query << ";"
+    ActiveRecord::Base.connect.exec_query(query)
+  end
+
+# This method is going to change the office hours for an instruct
+# with a specified instructor_id (??). Check needs to be added
+# order to make sure it is a valid instructor
+  def edit_office_hours(office_hours, instructor_id)
+    ActiveRecord::Base.connect.execute("
+    UPDATE instructors
+    (SET office_hours = #{office_hours})
+    WHERE instructor_id = #{instructor_id}")
+    return true
+  end
 
 # should this function stay in Instructor or in ProjectGrades?
 # First check may not be necessary, but we do it anyway to check
 # if the project actually exists to begin with
 # case 1: it doesn't so we return an error
 # case 2: we insert into project_grades the grade
-  def Instructor.grade(instructor_id, student_id, project_name, grade)
+  def grade(instructor_id, student_id, project_name, grade)
     if !ProjectGrades.exists?(student_id, project_name, section_id)
       raise ProjectGrades.no_project_error
     elseif ProjectGrades.exists?(student_id, project_name, section_id)
@@ -50,6 +71,7 @@ TODO:
       {#{student_id}, #{project_name}, #{section_id}, #{grade});")
       return true
     end
+  end
 
 # simply error message that no instructor exists with specified id
     private
