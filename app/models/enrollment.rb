@@ -17,15 +17,22 @@ class Enrollment < ActiveRecord::Base
     end
   end
 
-  private
-  # Does no error checking; use enroll
-  def Enrollment.insert(student_id, section_id)
-    ActiveRecord::Base.connection.execute("
-    INSERT INTO enrollments
-    (student_id, section_id)
-    VALUES
-    (#{student_id}, #{section_id});")
-    return true
+  def Enrollment.retrieve(student_id, section_id)
+    results = SqlHelper.retrieve("enrollments",
+                { "student_id" => student_id,
+                  "section_id" => section_id})
+    if results.empty?
+      raise Enrollment.no_enrollment_error(student_id, section_id)
+    else
+      Enrollment.new(results.first)
+    end
+  end
+
+  def unenroll
+    SqlHelper.delete("enrollments",
+          {"student_id" => student_id,
+           "section_id" => section_id})
+    return !Enrollment.exists?(student_id, section_id)
   end
 
   def Enrollment.already_enrolled_error(section_id)
@@ -35,5 +42,20 @@ class Enrollment < ActiveRecord::Base
 # no students enrolled
   def Enrollment.no_student_error(section_id)
     "No students enrolled in course #{section_id}"
+  end
+
+  def Enrollment.no_enrollment_error(student_id, section_id)
+    "Student #{student_id} is not enrolled in section #{section_id}"
+  end
+
+  private
+  # Does no error checking; use enroll
+  def Enrollment.insert(student_id, section_id)
+    ActiveRecord::Base.connection.execute("
+    INSERT INTO enrollments
+    (student_id, section_id)
+    VALUES
+    (#{student_id}, #{section_id});")
+    return Enrollment.retrieve(student_id, section_id)
   end
 end

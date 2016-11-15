@@ -13,6 +13,13 @@ module SqlHelper
     ActiveRecord::Base.connection.exec_query(query)
   end
 
+  def SqlHelper.delete(table, specifiers)
+    query = "DELETE FROM #{table}"
+    query << parse_specifiers(specifiers)
+    query << ";"
+    ActiveRecord::Base.connection.exec_query(query)
+  end
+
   # Does no error checking; use create_project
   def SqlHelper.insert_project(student_id, project_name, section_id)
     ActiveRecord::Base.connection.execute("
