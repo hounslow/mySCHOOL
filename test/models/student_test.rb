@@ -9,6 +9,12 @@ class StudentTest < ActionView::TestCase
     assert_not Student.exists?(8)
   end
 
+  test "student register/unregister true" do
+    assert student = Student.register(15,"Sandy", "sandy@live.ca")
+    assert student.unregister
+    assert_not Student.exists?(15)
+  end
+
   test "enrolled_in? true" do
     assert Student.retrieve(1).enrolled_in?(80)
   end

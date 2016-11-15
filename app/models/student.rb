@@ -14,6 +14,23 @@ class Student < ActiveRecord::Base
     end
   end
 
+  def Student.register(student_id, student_name, student_email)
+    if Student.exists?(student_id)
+      raise student_already_registered(student_id)
+    else
+      return SqlHelper.insert("students",
+                    {"student_id" => student_id,
+                     "student_name" => student_name,
+                     "student_email" => student_email})
+    end
+  end
+
+  def unregister
+    SqlHelper.delete("students",
+          {"student_id" => student_id})
+    return !Student.exists?(student_id)
+  end
+
   def enrolled_in?(section_id)
     return Enrollment.exists?(self.id, section_id)
   end

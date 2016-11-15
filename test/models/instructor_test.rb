@@ -13,13 +13,13 @@ class InstructorTest < ActionView::TestCase
     assert_equal instructor.instructor_email, "mgates@ubc.ca"
   end
 
-  test "register/unregister true" do
+  test "instructor register/unregister true" do
     assert instructor = Instructor.register(10,"Bob", "bob@bob.com")
     assert instructor.unregister
     assert_not Instructor.exists?(10)
   end
 
-  test "grade true" do
+  test "instructor grade true" do
     assert Instructor.retrieve(3).grade(1, 'Assignment 1', 80, 55)
     project = ProjectGrade.retrieve(1, 'Assignment 1', 80)
     assert_equal project.grade, 55
