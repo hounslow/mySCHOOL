@@ -18,9 +18,9 @@ class StudentTest < ActionView::TestCase
   end
 
   test "create_project true" do
-    assert_not ProjectGrades.exists?(1,'Assignment 3',80)
+    assert_not ProjectGrade.exists?(1,'Assignment 3',80)
     assert Student.retrieve(1).create_project('Assignment 3', 80)
-    assert ProjectGrades.exists?(1,'Assignment 3',80)
+    assert ProjectGrade.exists?(1,'Assignment 3',80)
   end
 
   test "create_project false" do
@@ -32,7 +32,7 @@ class StudentTest < ActionView::TestCase
       Student.retrieve(1).create_project('Assignment 1', 78)
     }
     # Project exists
-    assert_raises ProjectGrades.project_exists_error {
+    assert_raises ProjectGrade.project_exists_error {
       Student.create_project(1, 'Assignment 1', 80)
     }
   end
@@ -47,11 +47,11 @@ class StudentTest < ActionView::TestCase
   test "retrieve_grades false" do
     # Student has no grades at all
     assert_raises Student.no_grades_notice {
-      Student.retrieve(2).grades.empty?
+      Student.retrieve(2).grades
     }
     # Student has no grades in specified course
     assert_raises Student.no_grades_notice(80) {
-      Student.retrieve(3).grades(3,80).empty?
+      Student.retrieve(3).grades(3,80)
     }
   end
 

@@ -6,11 +6,11 @@ class Student < ActiveRecord::Base
   end
 
   def Student.retrieve(student_id)
-    results = SqlHelper.retrieve("students", {"student_id" => student_id})
-    if results.empty?
+    result = SqlHelper.retrieve("students", {"student_id" => student_id})
+    if result == nil
       raise Student.no_student_error(student_id)
     else
-      Student.new(results.first)
+      result
     end
   end
 
@@ -22,8 +22,8 @@ class Student < ActiveRecord::Base
     if !enrolled_in?(section_id)
       raise not_registered_error(section_id)
     # Make sure project doesn't exist
-    elsif ProjectGrades.exists?(student_id, project_name, section_id)
-      raise ProjectGrades.project_exists_error
+    elsif ProjectGrade.exists?(student_id, project_name, section_id)
+      raise ProjectGrade.project_exists_error
     # Everything looks good
     else
       SqlHelper.insert_project(student_id, project_name, section_id)
@@ -36,8 +36,7 @@ class Student < ActiveRecord::Base
   end
 
   def projects
-    results = Student.select_projects(student_id)
-    results.map {|res| ProjectGrades.new(res)}
+    Student.select_projects(student_id)
   end
 
   private
@@ -70,7 +69,7 @@ class Student < ActiveRecord::Base
   end
 
   def Student.select_projects(student_id)
-    SqlHelper.retrieve("project_grades",{
+    SqlHelper.retrieve_all("project_grades",{
       "student_id" => student_id})
   end
 end

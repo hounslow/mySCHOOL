@@ -11,13 +11,8 @@ class Instructor < ActiveRecord::Base
 # if no instruct exists we call no_instructor_error
 # otherwise call new
   def Instructor.retrieve(instructor_id)
-    results = SqlHelper.retrieve("instructors",
-    {"instructor_id" => instructor_id})
-    if results.empty?
-      raise Instructor.no_instructor_error(instructor_id)
-    else
-      Instructor.new(results.first)
-    end
+    SqlHelper.retrieve("instructors",
+                       {"instructor_id" => instructor_id})
   end
 
   def Instructor.register(instructor_id, instructor_name, instructor_email)
@@ -72,15 +67,15 @@ class Instructor < ActiveRecord::Base
     return true
   end
 
-# should this function stay in Instructor or in ProjectGrades?
+# should this function stay in Instructor or in ProjectGrade?
 # First check may not be necessary, but we do it anyway to check
 # if the project actually exists to begin with
 # case 1: it doesn't so we return an error
 # case 2: we insert into project_grades the grade
   def grade(student_id, project_name, section_id, grade)
-    project = ProjectGrades.retrieve(student_id, project_name, section_id)
+    project = ProjectGrade.retrieve(student_id, project_name, section_id)
     if project == nil
-      raise ProjectGrades.no_project_error
+      raise ProjectGrade.no_project_error
     else
       ActiveRecord::Base.connection.execute("
       INSERT INTO project_grades

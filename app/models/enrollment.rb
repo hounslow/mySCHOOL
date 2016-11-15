@@ -20,14 +20,9 @@ class Enrollment < ActiveRecord::Base
   end
 
   def Enrollment.retrieve(student_id, section_id)
-    results = SqlHelper.retrieve("enrollments",
+    SqlHelper.retrieve("enrollments",
                 { "student_id" => student_id,
                   "section_id" => section_id})
-    if results.empty?
-      raise Enrollment.no_enrollment_error(student_id, section_id)
-    else
-      Enrollment.new(results.first)
-    end
   end
 
   def unenroll

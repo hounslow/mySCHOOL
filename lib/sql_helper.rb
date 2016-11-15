@@ -12,8 +12,14 @@ module SqlHelper
     (#{specifiers.keys.join(',')})
     VALUES
     (#{specifiers.values.map(&:inspect).join(',')});")
+    SqlHelper.retrieve(table, specifiers)
+  end
 
-    result = SqlHelper.retrieve(table, specifiers).first
+  def SqlHelper.retrieve(table, specifiers)
+    query = "SELECT * FROM #{table}"
+    query << parse_specifiers(specifiers)
+    query << ";"
+    result = ActiveRecord::Base.connection.exec_query(query).first
     if result != nil
       return table.classify.constantize.new(result)
     else
@@ -21,11 +27,16 @@ module SqlHelper
     end
   end
 
-  def SqlHelper.retrieve(table, specifiers)
+  def SqlHelper.retrieve_all(table, specifiers)
     query = "SELECT * FROM #{table}"
     query << parse_specifiers(specifiers)
     query << ";"
-    ActiveRecord::Base.connection.exec_query(query)
+    result = ActiveRecord::Base.connection.exec_query(query)
+    if result != nil
+      return result.map {|a| table.classify.constantize.new(a)}
+    else
+      return nil
+    end
   end
 
   def SqlHelper.delete(table, specifiers)
@@ -33,6 +44,7 @@ module SqlHelper
     query << parse_specifiers(specifiers)
     query << ";"
     ActiveRecord::Base.connection.exec_query(query)
+    return true
   end
 
   # Does no error checking; use create_project
@@ -45,10 +57,11 @@ module SqlHelper
   end
 
   def SqlHelper.retrieve_students_from_project(specifiers)
-    ActiveRecord::Base.connection.exec_query("
+    results = ActiveRecord::Base.connection.exec_query("
       SELECT students.* from students, project_grades
       #{parse_specifiers(specifiers)}
       AND students.student_id = project_grades.student_id;")
+    results.map! {|res| Student.new(res)}
   end
 
   private
