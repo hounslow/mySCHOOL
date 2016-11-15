@@ -8,8 +8,8 @@ class Enrollment < ActiveRecord::Base
   end
 
   def Enrollment.enroll(student_id, section_id)
-    if !Section.exists?(section_id)
-      raise Section.no_section_error(section_id)
+    if !SectionTeach.exists?(section_id)
+      raise SectionTeach.no_section_error(section_id)
     elsif Enrollment.exists?(student_id, section_id)
       raise already_enrolled_error(section_id)
     else

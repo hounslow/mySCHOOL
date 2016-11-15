@@ -89,7 +89,6 @@ class Instructor < ActiveRecord::Base
   end
 
 # simply error message that no instructor exists with specified id
-    private
     def Instructor.no_instructor_error(instructor_id)
       "No instructor with ID #{instructor_id} exists"
     end

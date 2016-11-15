@@ -11,10 +11,11 @@ class InstructorTest < ActionView::TestCase
     assert_equal instructor.class.name, "Instructor"
     assert_equal instructor.instructor_name, "Marvin Gates"
     assert_equal instructor.instructor_email, "mgates@ubc.ca"
+    assert instructor.is_professor
   end
 
   test "instructor register/unregister true" do
-    assert instructor = Instructor.register(10,"Bob", "bob@bob.com")
+    assert instructor = Instructor.register(10,"Bob", "bob@bob.com", false)
     assert instructor.unregister
     assert_not Instructor.exists?(10)
   end

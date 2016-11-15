@@ -1,9 +1,6 @@
 module SqlHelper
   def SqlHelper.exists?(table, specifiers)
-    query  = "SELECT * FROM #{table}"
-    query << parse_specifiers(specifiers)
-    query << ";"
-    ActiveRecord::Base.connection.exec_query(query).length > 0
+    return SqlHelper.retrieve(table, specifiers) != nil
   end
 
   def SqlHelper.insert(table, specifiers)
