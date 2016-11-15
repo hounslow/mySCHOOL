@@ -13,7 +13,9 @@ class Enrollment < ActiveRecord::Base
     elsif Enrollment.exists?(student_id, section_id)
       raise already_enrolled_error(section_id)
     else
-      return Enrollment.insert(student_id, section_id)
+      return SqlHelper.insert("enrollments",
+                    {"student_id" => student_id,
+                     "section_id" => section_id})
     end
   end
 
@@ -46,16 +48,5 @@ class Enrollment < ActiveRecord::Base
 
   def Enrollment.no_enrollment_error(student_id, section_id)
     "Student #{student_id} is not enrolled in section #{section_id}"
-  end
-
-  private
-  # Does no error checking; use enroll
-  def Enrollment.insert(student_id, section_id)
-    ActiveRecord::Base.connection.execute("
-    INSERT INTO enrollments
-    (student_id, section_id)
-    VALUES
-    (#{student_id}, #{section_id});")
-    return Enrollment.retrieve(student_id, section_id)
   end
 end

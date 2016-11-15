@@ -6,6 +6,21 @@ module SqlHelper
     ActiveRecord::Base.connection.exec_query(query).length > 0
   end
 
+  def SqlHelper.insert(table, specifiers)
+    ActiveRecord::Base.connection.execute("
+    INSERT INTO #{table}
+    (#{specifiers.keys.join(',')})
+    VALUES
+    (#{specifiers.values.map(&:inspect).join(',')});")
+
+    result = SqlHelper.retrieve(table, specifiers).first
+    if result != nil
+      return table.classify.constantize.new(result)
+    else
+      return nil
+    end
+  end
+
   def SqlHelper.retrieve(table, specifiers)
     query = "SELECT * FROM #{table}"
     query << parse_specifiers(specifiers)

@@ -4,7 +4,7 @@ class Instructor < ActiveRecord::Base
 # simple existence check
   def Instructor.exists?(instructor_id)
     return SqlHelper.exists?("instructors",
-    {"instructor_id" => instructor_id})
+      {"instructor_id" => instructor_id})
   end
 
 # retrieve the instructor using the instructor_id
@@ -18,6 +18,23 @@ class Instructor < ActiveRecord::Base
     else
       Instructor.new(results.first)
     end
+  end
+
+  def Instructor.register(instructor_id, instructor_name, instructor_email)
+    if Instructor.exists?(instructor_id)
+      raise instructor_already_registered(instructor_id)
+    else
+      return SqlHelper.insert("instructors",
+                    {"instructor_id" => instructor_id,
+                     "instructor_name" => instructor_name,
+                     "instructor_email" => instructor_email})
+    end
+  end
+
+  def unregister
+    SqlHelper.delete("instructors",
+          {"instructor_id" => instructor_id})
+    return !Instructor.exists?(instructor_id)
   end
 
 # want to view enrollment for section with section_id
