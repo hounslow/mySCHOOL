@@ -15,14 +15,15 @@ class Instructor < ActiveRecord::Base
                        {"instructor_id" => instructor_id})
   end
 
-  def Instructor.register(instructor_id, instructor_name, instructor_email)
+  def Instructor.register(instructor_id, instructor_name, instructor_email, is_professor)
     if Instructor.exists?(instructor_id)
       raise instructor_already_registered(instructor_id)
     else
       return SqlHelper.insert("instructors",
                     {"instructor_id" => instructor_id,
                      "instructor_name" => instructor_name,
-                     "instructor_email" => instructor_email})
+                     "instructor_email" => instructor_email,
+                     "is_professor" => is_professor})
     end
   end
 
