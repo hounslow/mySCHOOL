@@ -1,0 +1,2 @@
+module SectionTeachHelper
+end

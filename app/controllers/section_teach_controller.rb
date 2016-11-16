@@ -1,0 +1,2 @@
+class SectionTeachController < ApplicationController
+end

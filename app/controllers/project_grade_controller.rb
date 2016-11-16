@@ -1,0 +1,2 @@
+class ProjectGradeController < ApplicationController
+end
