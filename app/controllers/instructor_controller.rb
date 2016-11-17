@@ -1,4 +1,4 @@
-class InstructorsController < ApplicationController
+class InstructorController < ApplicationController
 
   def list
     @instructors = Instructor.all
