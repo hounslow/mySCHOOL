@@ -1,12 +1,11 @@
 class InstructorController < ApplicationController
 
-  def list
+  def instructor_view
     @instructors = Instructor.all
   end
 
   def show
     @instructor = Instructor.find(params[:id])
-    redirect_to @instructor.url
   end
 
   def new
@@ -14,8 +13,7 @@ class InstructorController < ApplicationController
   end
 
   def create
-    @instructor = Instructor.new(instructor_param)
-
+    @instructor = Instructor.new(params[:instructor])
     if @instructor.save
       flash[:instructor_id] = @instructor.id
       redirect_to :action => 'list'
@@ -30,9 +28,9 @@ class InstructorController < ApplicationController
 
   def update
    @instructor = Instructor.find(params[:id])
-
-   if @instructor.update_attributes(instructor_param)
-      redirect_to :action => 'show', :id => @instructor
+   if @instructor.update_attributes(params[:instructor])
+      redirect_to(@instructor)
+      #:action => 'show', :id => @instructor
    else
       #@subjects = Subject.all
       render :action => 'edit'

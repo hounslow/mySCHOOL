@@ -1,2 +1,25 @@
-<<h1>Instructor#new</h1>
-<p>Find me in app/views/instructors/new.html.erb</p>
+<h1>Names of all the instructors</h1>
+<%= link_to 'instructor 4', {:controller => 'instructor',
+   :action => 'instructor_view'} %>
+
+<% if @instructors.blank? %>
+<p> No instructors currently </p>
+
+  <% else %>
+    <table>
+    <tr>
+      <th>Instructor Id </th>
+      <th>Instructor Name</th>
+      <th>Instructor Email </th>
+      <th>Professor </th>
+    </tr>
+    <% @instructors.each do |instructor| %>
+    <tr>
+      <td><%= instructor.instructor_id %></td>
+      <td><%= instructor.instructor_name %></td>
+      <td><%= instructor.instructor_email %></td>
+      <td><%= instructor.is_professor %></td>>
+    </tr>
+    <% end %>
+  </table>
+  <% end %>
